@@ -17,6 +17,8 @@
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UISegmentedControl *matchTypeButton;
 @property (weak, nonatomic) IBOutlet UILabel *gameActionDescriptionLabel;
+@property (strong, nonatomic) NSMutableArray *chosenCardsResultHistory; // of NSString
+@property (weak, nonatomic) IBOutlet UISlider *resultsHistorySlider;
 
 @end
 
@@ -35,6 +37,14 @@
     return [[PlayingCardDeck alloc] init];
 }
 
+
+
+-(NSMutableArray *)chosenCardsResultHistory
+{
+    if (!_chosenCardsResultHistory) _chosenCardsResultHistory = [[NSMutableArray alloc] init];
+    return _chosenCardsResultHistory;
+}
+        
 - (IBAction)touchNumberOfCardsToMatchButton:(UISegmentedControl *)sender
 {
     if (sender.selectedSegmentIndex == 0) {
@@ -47,6 +57,7 @@
 - (IBAction)touchResetCardsButton:(UIButton *)sender
 {
     self.game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count] usingDeck:[self createDeck]];
+    self.chosenCardsResultHistory = nil;
     [self updateUI];
 }
 
@@ -55,8 +66,20 @@
     int chosenButtonIndex = [self.cardButtons indexOfObject:sender];
     [self.game choosecardAtIndex:chosenButtonIndex];
     [self updateUI];
+    [self.resultsHistorySlider setValue:self.resultsHistorySlider.maximumValue animated:YES];
+    [self.gameActionDescriptionLabel setAlpha:1.0];
 }
 
+- (IBAction)resultsHistorySilderValuChanged:(UISlider *)sender
+{
+    int chosenCardsResultHistoryIndex = sender.value;
+    if (self.chosenCardsResultHistory.count > chosenCardsResultHistoryIndex) {
+        [self.gameActionDescriptionLabel setAlpha:0.5];
+        self.gameActionDescriptionLabel.text = self.chosenCardsResultHistory[chosenCardsResultHistoryIndex];
+    } else {
+        [self.gameActionDescriptionLabel setAlpha:1.0];
+    }
+}
 // Helper Methods
 
 - (void)updateUI
@@ -70,7 +93,14 @@
         self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
         self.matchTypeButton.enabled = !self.game.gameStarted;
         [self updateGameActionDescriptionLabel];
+        [self updateResultsHistory];
     }
+}
+
+- (void)updateResultsHistory
+{
+    [self.chosenCardsResultHistory addObject:self.gameActionDescriptionLabel.text];
+    self.resultsHistorySlider.maximumValue = self.chosenCardsResultHistory.count;
 }
 
 - (void)updateGameActionDescriptionLabel
