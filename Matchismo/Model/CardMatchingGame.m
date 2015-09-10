@@ -8,6 +8,7 @@
 
 #import "CardMatchingGame.h"
 
+#pragma mark - CardMatchingGame Private Interface
 @interface CardMatchingGame()
 
 @property (nonatomic, readwrite) NSInteger score;
@@ -16,7 +17,10 @@
 @property (nonatomic, strong, readwrite) NSMutableArray *lastChosenCards; // of Card
 @end
 
+#pragma mark - CardMatchingGame Implemenation
 @implementation CardMatchingGame
+
+#pragma mark - Properties
 
 - (NSMutableArray *)cards
 {
@@ -49,10 +53,12 @@
 - (NSUInteger)numberOfCardsToCompareMatch
 {
     if (!_numberOfCardsToCompareMatch) _numberOfCardsToCompareMatch = 2;
-        return _numberOfCardsToCompareMatch;
-
-        
+    return _numberOfCardsToCompareMatch;
+    
+    
 }
+
+#pragma mark - Designated Initializer
 
 - (instancetype)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck
 {
@@ -74,6 +80,7 @@
     return self;
 }
 
+#pragma mark - Instance Methods
 - (Card *)cardAtIndex:(NSUInteger)index
 {
     return (index < [self.cards count]) ? self.cards[index] : nil;
@@ -102,74 +109,62 @@ static const int COST_TO_CHOOSE = 1;
     Card *card = [self cardAtIndex:index];
     
     if (!card.isMatched) {
-        if (card.isChosen) {
+        if (card.isChosen) { // if card is already 'chosen', 'unchose' it
             card.chosen = NO;
             [self.lastChosenCards removeObject:card];
-        } else {
-            // find out if enough cards are chosen to compare for a match
+        } else { //card is not already chosen
             card.chosen = YES;
             [self.lastChosenCards addObject:card];
-            //NSLog(@"card was chosen");
+            
+            // check if enough cards are chosen to match, if so check for matches
             if (self.lastChosenCards.count == self.numberOfCardsToCompareMatch) {
                 [self matchCards:[self.lastChosenCards copy]];
-//                if (!self.lastMatchAttemptSuccessful){
-//                    [self.lastChosenCards addObject:card];
-//                }
             }
             
             self.score -= COST_TO_CHOOSE;
             card.chosen = YES;
         }
     }
-    int lastChosenCardCount = [self.lastChosenCards count];
-    //NSLog(@"%d card", lastChosenCardCount);
 }
 
-- (NSArray *)getCardsToMatch
-{
-    NSMutableArray *chosenUnmatchedCards = [[NSMutableArray alloc] init];
-    for (Card *otherCard in self.cards){
-        if (otherCard.isChosen && !otherCard.isMatched) {
-            [chosenUnmatchedCards addObject:otherCard];
-        }
-    }
-    return chosenUnmatchedCards;
-}
+#pragma mark - Private Helper Methods
 
 - (void)matchCards:(NSArray *)cards
 {
-   // NSLog(@"matchCards: called");
+    int matchScore = [self getMatchScoreForCards:cards];
+    
+    if (matchScore) {
+        self.score += matchScore * MATCH_BONUS;
+        self.lastAttemptedMatchScoreChange = matchScore * MATCH_BONUS;
+        self.lastMatchAttemptSuccessful = YES;
+        for (Card *otherCard in cards) {
+            otherCard.matched = YES;
+        }
+    } else {
+        self.score -= MISMATCH_PENALTY;
+        self.lastAttemptedMatchScoreChange = -MISMATCH_PENALTY;
+        self.lastMatchAttemptSuccessful = NO;
+        for (Card *otherCard in cards) {
+            otherCard.chosen = NO;
+        }
+    }
+}
+
+- (int)getMatchScoreForCards:(NSArray *)cards
+{
     int matchScore = 0;
     for (Card *otherCard in cards) {
-        int otherCardIndex = [cards indexOfObject:otherCard];
+        NSUInteger otherCardIndex = [cards indexOfObject:otherCard];
         NSMutableArray *remainingCards = [[NSMutableArray alloc] init];
-        for (int newIndex = otherCardIndex + 1; newIndex < cards.count; newIndex++) {
+        for (NSUInteger newIndex = otherCardIndex + 1; newIndex < cards.count; newIndex++) {
             [remainingCards addObject:cards[newIndex]];
         }
         if (remainingCards.count >= 1) {
             matchScore += [otherCard match:remainingCards];
         }
     }
-    if (matchScore) {
-       // NSLog(@"match");
-        self.score += matchScore * MATCH_BONUS;
-        self.lastAttemptedMatchScoreChange = matchScore * MATCH_BONUS;
-        self.lastMatchAttemptSuccessful = YES;
-        for (Card *otherCard in cards) {
-            otherCard.matched = YES;
-            //[self.lastChosenCards removeObject:otherCard];
-        }
-    } else {
-       // NSLog(@"mismatch");
-        self.score -= MISMATCH_PENALTY;
-        self.lastAttemptedMatchScoreChange = -MISMATCH_PENALTY;
-        self.lastMatchAttemptSuccessful = NO;
-        for (Card *otherCard in cards) {
-            otherCard.chosen = NO;
-            //[self.lastChosenCards removeObject:otherCard];
-        }
-    }
-
+    
+    return matchScore;
 }
 
 

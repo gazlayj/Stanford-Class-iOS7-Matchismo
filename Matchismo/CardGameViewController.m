@@ -44,7 +44,7 @@
     if (!_chosenCardsResultHistory) _chosenCardsResultHistory = [[NSMutableArray alloc] init];
     return _chosenCardsResultHistory;
 }
-        
+
 - (IBAction)touchNumberOfCardsToMatchButton:(UISegmentedControl *)sender
 {
     if (sender.selectedSegmentIndex == 0) {
@@ -63,7 +63,7 @@
 
 - (IBAction)touchCardButton:(UIButton *)sender
 {
-    int chosenButtonIndex = [self.cardButtons indexOfObject:sender];
+    NSUInteger chosenButtonIndex = [self.cardButtons indexOfObject:sender];
     [self.game choosecardAtIndex:chosenButtonIndex];
     [self updateUI];
     [self.resultsHistorySlider setValue:self.resultsHistorySlider.maximumValue animated:YES];
@@ -84,16 +84,23 @@
 
 - (void)updateUI
 {
+    
+    [self updateCards];
+    self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", (long)self.game.score];
+    self.matchTypeButton.enabled = !self.game.gameStarted;
+    [self updateGameActionDescriptionLabel];
+    [self updateResultsHistory];
+    
+}
+
+- (void)updateCards
+{
     for (UIButton *cardButton in self.cardButtons) {
-        int cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
+        NSUInteger cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
         Card *card = [self.game cardAtIndex:cardButtonIndex];
         [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];
         [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
         cardButton.enabled = !card.isMatched;
-        self.scoreLabel.text = [NSString stringWithFormat:@"Score: %d", self.game.score];
-        self.matchTypeButton.enabled = !self.game.gameStarted;
-        [self updateGameActionDescriptionLabel];
-        [self updateResultsHistory];
     }
 }
 
@@ -104,6 +111,25 @@
 }
 
 - (void)updateGameActionDescriptionLabel
+{
+    //NSLog(cardsDescription);
+    NSString *cardsDescription = [self composeGameActionDescription];
+    
+    if (self.game.lastChosenCards.count == self.game.numberOfCardsToCompareMatch) {
+        if (self.game.lastMatchAttemptSuccessful) {
+            self.gameActionDescriptionLabel.text = [NSString stringWithFormat:@"Matched %@ for %ld points.", cardsDescription, (long)self.game.lastAttemptedMatchScoreChange];
+            //NSLog(@"successful match");
+        } else {
+            self.gameActionDescriptionLabel.text = [NSString stringWithFormat:@"%@ don't match! %ld point penalty!", cardsDescription, (long)-self.game.lastAttemptedMatchScoreChange];
+            //NSLog(@"unsuccessful match");
+        }
+    } else {
+        self.gameActionDescriptionLabel.text = cardsDescription;
+        
+    }
+}
+
+- (NSString *)composeGameActionDescription
 {
     NSString *cardsDescription = @"";
     for (Card *card in self.game.lastChosenCards) {
@@ -116,20 +142,8 @@
             cardsDescription = newCardsDescription;
         }
     }
-    //NSLog(cardsDescription);
     
-    if (self.game.lastChosenCards.count == self.game.numberOfCardsToCompareMatch) {
-        if (self.game.lastMatchAttemptSuccessful) {
-            self.gameActionDescriptionLabel.text = [NSString stringWithFormat:@"Matched %@ for %d points.", cardsDescription, self.game.lastAttemptedMatchScoreChange];
-            //NSLog(@"successful match");
-        } else {
-            self.gameActionDescriptionLabel.text = [NSString stringWithFormat:@"%@ don't match! %d point penalty!", cardsDescription, -self.game.lastAttemptedMatchScoreChange];
-            //NSLog(@"unsuccessful match");
-        }
-    } else {
-        self.gameActionDescriptionLabel.text = cardsDescription;
-        
-    }
+    return cardsDescription;
 }
 
 - (NSString *)titleForCard:(Card *)card

@@ -10,14 +10,17 @@
 #import "Deck.h"
 #import "Card.h"
 
+#pragma mark - CardMatchingGame Public Interface
 @interface CardMatchingGame : NSObject
 
-// Designated initalizer
+#pragma mark - Designated initalizer
 - (instancetype)initWithCardCount:(NSUInteger)count usingDeck:(Deck *)deck;
 
+#pragma mark - Instance Methods
 - (void)choosecardAtIndex:(NSUInteger)index;
 - (Card *)cardAtIndex:(NSUInteger)index;
 
+#pragma mark - Properties
 @property (nonatomic, readonly) NSInteger score;
 @property (nonatomic) NSUInteger numberOfCardsToCompareMatch;
 @property (nonatomic, readonly) BOOL gameStarted;
