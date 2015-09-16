@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2539A4141BA9218200F7F6C6 /* SetCardViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 2539A4131BA9218200F7F6C6 /* SetCardViewController.m */; settings = {ASSET_TAGS = (); }; };
+		25910D0A1BA7AABD00A9CABA /* PlayingCardGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 25910D091BA7AABD00A9CABA /* PlayingCardGameViewController.m */; settings = {ASSET_TAGS = (); }; };
+		25910D0D1BA7BF4500A9CABA /* SetCard.m in Sources */ = {isa = PBXBuildFile; fileRef = 25910D0C1BA7BF4500A9CABA /* SetCard.m */; settings = {ASSET_TAGS = (); }; };
+		25910D101BA7D6B300A9CABA /* SetCardDeck.m in Sources */ = {isa = PBXBuildFile; fileRef = 25910D0F1BA7D6B300A9CABA /* SetCardDeck.m */; settings = {ASSET_TAGS = (); }; };
+		25910D131BA7D81600A9CABA /* SetCardGameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 25910D121BA7D81600A9CABA /* SetCardGameViewController.m */; settings = {ASSET_TAGS = (); }; };
 		25C674511B96964C00E9E318 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 25C674501B96964C00E9E318 /* main.m */; };
 		25C674541B96964C00E9E318 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 25C674531B96964C00E9E318 /* AppDelegate.m */; };
 		25C6745A1B96964C00E9E318 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 25C674581B96964C00E9E318 /* Main.storyboard */; };
@@ -32,6 +37,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		2539A4121BA9218200F7F6C6 /* SetCardViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetCardViewController.h; sourceTree = "<group>"; };
+		2539A4131BA9218200F7F6C6 /* SetCardViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetCardViewController.m; sourceTree = "<group>"; };
+		25910D081BA7AABD00A9CABA /* PlayingCardGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PlayingCardGameViewController.h; sourceTree = "<group>"; };
+		25910D091BA7AABD00A9CABA /* PlayingCardGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PlayingCardGameViewController.m; sourceTree = "<group>"; };
+		25910D0B1BA7BF4500A9CABA /* SetCard.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SetCard.h; path = Model/SetCard.h; sourceTree = "<group>"; };
+		25910D0C1BA7BF4500A9CABA /* SetCard.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SetCard.m; path = Model/SetCard.m; sourceTree = "<group>"; };
+		25910D0E1BA7D6B300A9CABA /* SetCardDeck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SetCardDeck.h; path = Model/SetCardDeck.h; sourceTree = "<group>"; };
+		25910D0F1BA7D6B300A9CABA /* SetCardDeck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SetCardDeck.m; path = Model/SetCardDeck.m; sourceTree = "<group>"; };
+		25910D111BA7D81600A9CABA /* SetCardGameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SetCardGameViewController.h; sourceTree = "<group>"; };
+		25910D121BA7D81600A9CABA /* SetCardGameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SetCardGameViewController.m; sourceTree = "<group>"; };
 		25C6744B1B96964C00E9E318 /* Matchismo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Matchismo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		25C6744F1B96964C00E9E318 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		25C674501B96964C00E9E318 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -98,7 +113,13 @@
 			children = (
 				25C674741B9696BC00E9E318 /* CardGameViewController.h */,
 				25C674751B9696BC00E9E318 /* CardGameViewController.m */,
+				25910D081BA7AABD00A9CABA /* PlayingCardGameViewController.h */,
+				25910D091BA7AABD00A9CABA /* PlayingCardGameViewController.m */,
+				25910D111BA7D81600A9CABA /* SetCardGameViewController.h */,
+				25910D121BA7D81600A9CABA /* SetCardGameViewController.m */,
 				25C674581B96964C00E9E318 /* Main.storyboard */,
+				2539A4121BA9218200F7F6C6 /* SetCardViewController.h */,
+				2539A4131BA9218200F7F6C6 /* SetCardViewController.m */,
 				25C6747A1B969CD600E9E318 /* Model */,
 				25C6745B1B96964C00E9E318 /* Images.xcassets */,
 				25C6745D1B96964C00E9E318 /* LaunchScreen.xib */,
@@ -140,12 +161,16 @@
 			children = (
 				25C674771B969CC700E9E318 /* Card.h */,
 				25C674781B969CC700E9E318 /* Card.m */,
+				25910D0B1BA7BF4500A9CABA /* SetCard.h */,
+				25910D0C1BA7BF4500A9CABA /* SetCard.m */,
 				25C6747B1B969EFD00E9E318 /* PlayingCard.h */,
 				25C6747C1B969EFD00E9E318 /* PlayingCard.m */,
 				25C6747E1B96A49500E9E318 /* Deck.h */,
 				25C6747F1B96A49500E9E318 /* Deck.m */,
 				25C674811B96A6C200E9E318 /* PlayingCardDeck.h */,
 				25C674821B96A6C200E9E318 /* PlayingCardDeck.m */,
+				25910D0E1BA7D6B300A9CABA /* SetCardDeck.h */,
+				25910D0F1BA7D6B300A9CABA /* SetCardDeck.m */,
 				25DF71181B993161008D8203 /* CardMatchingGame.h */,
 				25DF71191B993161008D8203 /* CardMatchingGame.m */,
 			);
@@ -196,7 +221,7 @@
 		25C674431B96964C00E9E318 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0640;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Justin Gazlay";
 				TargetAttributes = {
 					25C6744A1B96964C00E9E318 = {
@@ -253,13 +278,18 @@
 			buildActionMask = 2147483647;
 			files = (
 				25C674541B96964C00E9E318 /* AppDelegate.m in Sources */,
+				25910D131BA7D81600A9CABA /* SetCardGameViewController.m in Sources */,
 				25C674761B9696BC00E9E318 /* CardGameViewController.m in Sources */,
 				25C674511B96964C00E9E318 /* main.m in Sources */,
+				25910D101BA7D6B300A9CABA /* SetCardDeck.m in Sources */,
 				25C6747D1B969EFD00E9E318 /* PlayingCard.m in Sources */,
+				25910D0D1BA7BF4500A9CABA /* SetCard.m in Sources */,
 				25DF711A1B993161008D8203 /* CardMatchingGame.m in Sources */,
 				25C674831B96A6C200E9E318 /* PlayingCardDeck.m in Sources */,
 				25C674801B96A49500E9E318 /* Deck.m in Sources */,
 				25C674791B969CC700E9E318 /* Card.m in Sources */,
+				25910D0A1BA7AABD00A9CABA /* PlayingCardGameViewController.m in Sources */,
+				2539A4141BA9218200F7F6C6 /* SetCardViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -322,6 +352,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -387,6 +418,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Matchismo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "self.edu.justin.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -397,6 +429,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Matchismo/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "self.edu.justin.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -415,6 +448,7 @@
 				);
 				INFOPLIST_FILE = MatchismoTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "self.edu.justin.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Matchismo.app/Matchismo";
 			};
@@ -430,6 +464,7 @@
 				);
 				INFOPLIST_FILE = MatchismoTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "self.edu.justin.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Matchismo.app/Matchismo";
 			};

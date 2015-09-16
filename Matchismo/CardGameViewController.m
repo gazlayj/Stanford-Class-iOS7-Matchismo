@@ -7,15 +7,12 @@
 //
 
 #import "CardGameViewController.h"
-#import "PlayingCardDeck.h"
 #import "CardMatchingGame.h"
 
 @interface CardGameViewController ()
 
-@property (strong, nonatomic) CardMatchingGame *game;
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
-@property (weak, nonatomic) IBOutlet UISegmentedControl *matchTypeButton;
 @property (weak, nonatomic) IBOutlet UILabel *gameActionDescriptionLabel;
 @property (strong, nonatomic) NSMutableArray *chosenCardsResultHistory; // of NSString
 @property (weak, nonatomic) IBOutlet UISlider *resultsHistorySlider;
@@ -23,6 +20,13 @@
 @end
 
 @implementation CardGameViewController
+
+- (void)viewDidLoad {
+    [super viewDidLoad];
+    // Do any additional setup after loading the view.
+    [self updateUI];
+    
+}
 
 -(CardMatchingGame *)game
 {
@@ -32,9 +36,9 @@
     return _game;
 }
 
-- (Deck *)createDeck
+- (Deck *)createDeck // abstract
 {
-    return [[PlayingCardDeck alloc] init];
+    return nil;
 }
 
 
@@ -45,17 +49,10 @@
     return _chosenCardsResultHistory;
 }
 
-- (IBAction)touchNumberOfCardsToMatchButton:(UISegmentedControl *)sender
-{
-    if (sender.selectedSegmentIndex == 0) {
-        self.game.numberOfCardsToCompareMatch = 2;
-    } else if (sender.selectedSegmentIndex == 1) {
-        self.game.numberOfCardsToCompareMatch = 3;
-    }
-}
 
 - (IBAction)touchResetCardsButton:(UIButton *)sender
 {
+    
     self.game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count] usingDeck:[self createDeck]];
     self.chosenCardsResultHistory = nil;
     [self updateUI];
@@ -87,7 +84,6 @@
     
     [self updateCards];
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", (long)self.game.score];
-    self.matchTypeButton.enabled = !self.game.gameStarted;
     [self updateGameActionDescriptionLabel];
     [self updateResultsHistory];
     
@@ -98,7 +94,7 @@
     for (UIButton *cardButton in self.cardButtons) {
         NSUInteger cardButtonIndex = [self.cardButtons indexOfObject:cardButton];
         Card *card = [self.game cardAtIndex:cardButtonIndex];
-        [cardButton setTitle:[self titleForCard:card] forState:UIControlStateNormal];
+        [cardButton setAttributedTitle:[self titleForCard:card] forState:UIControlStateNormal];
         [cardButton setBackgroundImage:[self backgroundImageForCard:card] forState:UIControlStateNormal];
         cardButton.enabled = !card.isMatched;
     }
@@ -135,10 +131,10 @@
     for (Card *card in self.game.lastChosenCards) {
         
         if ([cardsDescription isEqualToString:@""]) {
-            cardsDescription = card.contents;
+            cardsDescription = [NSString stringWithFormat:@"%@",[self titleForCard:card]];
         } else {
             //NSLog(@"card Added");
-            NSString *newCardsDescription = [NSString stringWithFormat:@"%@, %@", cardsDescription, card.contents];
+            NSString *newCardsDescription = [NSString stringWithFormat:@"%@, %@", cardsDescription, [self titleForCard:card]];
             cardsDescription = newCardsDescription;
         }
     }
@@ -146,9 +142,9 @@
     return cardsDescription;
 }
 
-- (NSString *)titleForCard:(Card *)card
+- (NSAttributedString *)titleForCard:(Card *)card
 {
-    return card.isChosen ? card.contents : @"";
+    return card.isChosen ? [[NSAttributedString alloc] initWithString:card.contents] : [[NSAttributedString alloc] initWithString:@""];
 }
 
 - (UIImage *)backgroundImageForCard:(Card *)card
