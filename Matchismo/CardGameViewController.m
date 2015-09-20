@@ -14,7 +14,7 @@
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *gameActionDescriptionLabel;
-@property (strong, nonatomic) NSMutableArray *chosenCardsResultHistory; // of NSString
+//@property (strong, nonatomic) NSMutableArray *chosenCardsResultHistory; // of NSString
 @property (weak, nonatomic) IBOutlet UISlider *resultsHistorySlider;
 
 @end
@@ -42,19 +42,10 @@
 }
 
 
-
--(NSMutableArray *)chosenCardsResultHistory
-{
-    if (!_chosenCardsResultHistory) _chosenCardsResultHistory = [[NSMutableArray alloc] init];
-    return _chosenCardsResultHistory;
-}
-
-
 - (IBAction)touchResetCardsButton:(UIButton *)sender
 {
     
     self.game = [[CardMatchingGame alloc] initWithCardCount:[self.cardButtons count] usingDeck:[self createDeck]];
-    self.chosenCardsResultHistory = nil;
     [self updateUI];
 }
 
@@ -70,9 +61,9 @@
 - (IBAction)resultsHistorySilderValuChanged:(UISlider *)sender
 {
     int chosenCardsResultHistoryIndex = sender.value;
-    if (self.chosenCardsResultHistory.count > chosenCardsResultHistoryIndex) {
+    if ([self.game.gameActions count] > chosenCardsResultHistoryIndex) {
         [self.gameActionDescriptionLabel setAlpha:0.5];
-        self.gameActionDescriptionLabel.text = self.chosenCardsResultHistory[chosenCardsResultHistoryIndex];
+        [self updateGameActionDescriptionLabel];
     } else {
         [self.gameActionDescriptionLabel setAlpha:1.0];
     }
@@ -102,45 +93,61 @@
 
 - (void)updateResultsHistory
 {
-    [self.chosenCardsResultHistory addObject:self.gameActionDescriptionLabel.text];
-    self.resultsHistorySlider.maximumValue = self.chosenCardsResultHistory.count;
+//    [self.chosenCardsResultHistory addObject:self.gameActionDescriptionLabel.text];
+    self.resultsHistorySlider.maximumValue = [self.game.gameActions count];
 }
 
-- (void)updateGameActionDescriptionLabel
+- (NSAttributedString *)descriptionForGameAction:(CardGameAction *)action
 {
-    //NSLog(cardsDescription);
-    NSString *cardsDescription = [self composeGameActionDescription];
     
-    if (self.game.lastChosenCards.count == self.game.numberOfCardsToCompareMatch) {
-        if (self.game.lastMatchAttemptSuccessful) {
-            self.gameActionDescriptionLabel.text = [NSString stringWithFormat:@"Matched %@ for %ld points.", cardsDescription, (long)self.game.lastAttemptedMatchScoreChange];
-            //NSLog(@"successful match");
-        } else {
-            self.gameActionDescriptionLabel.text = [NSString stringWithFormat:@"%@ don't match! %ld point penalty!", cardsDescription, (long)-self.game.lastAttemptedMatchScoreChange];
-            //NSLog(@"unsuccessful match");
-        }
-    } else {
-        self.gameActionDescriptionLabel.text = cardsDescription;
-        
+    NSAttributedString *cardsDescription = [self descriptionForCards:action.chosenCards];
+    NSMutableAttributedString *gameActionDescription = [cardsDescription mutableCopy];
+    
+    switch (action.actionType) {
+        case Mismatch:
+            {
+                NSAttributedString *mismatchDescription = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" don't match! %ld point pentalty!", (long)action.pointsEarned]];
+                [gameActionDescription appendAttributedString:mismatchDescription];
+                break;
+             }
+        case Match:
+            {
+                NSAttributedString *matchDescription = [[NSAttributedString alloc] initWithString:[NSString stringWithFormat:@" matched for %ld points!", (long)action.pointsEarned]];
+                [gameActionDescription appendAttributedString:matchDescription];
+                break;
+            }
+        default:
+            break;
     }
+    
+    return gameActionDescription;
 }
 
-- (NSString *)composeGameActionDescription
+- (NSAttributedString *)descriptionForCards:(NSArray *)cards
 {
-    NSString *cardsDescription = @"";
-    for (Card *card in self.game.lastChosenCards) {
-        
-        if ([cardsDescription isEqualToString:@""]) {
-            cardsDescription = [NSString stringWithFormat:@"%@",[self titleForCard:card]];
-        } else {
-            //NSLog(@"card Added");
-            NSString *newCardsDescription = [NSString stringWithFormat:@"%@, %@", cardsDescription, [self titleForCard:card]];
-            cardsDescription = newCardsDescription;
+    NSMutableAttributedString *cardsDescription = [[NSMutableAttributedString alloc] init];
+    
+    for (Card *card in cards) {
+        if ([cardsDescription length] > 0) {
+            [cardsDescription appendAttributedString:[[NSAttributedString alloc] initWithString:@", "]];
         }
+        [cardsDescription appendAttributedString:[self titleForCard:card]];
     }
     
     return cardsDescription;
 }
+
+- (void)updateGameActionDescriptionLabel
+{
+    NSUInteger actionIndex = self.resultsHistorySlider.value;
+    
+    if ([self.game.gameActions count] > actionIndex) {
+        self.gameActionDescriptionLabel.attributedText = [self descriptionForGameAction:self.game.gameActions[actionIndex]];
+    } else {
+        self.gameActionDescriptionLabel.attributedText = nil;
+    }
+}
+
 
 - (NSAttributedString *)titleForCard:(Card *)card
 {

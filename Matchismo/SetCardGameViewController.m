@@ -31,7 +31,7 @@
 
 -(UIImage *)backgroundImageForCard:(Card *)card
 {
-    return [UIImage imageNamed:@"cardFront"];
+    return card.isChosen ? [UIImage imageNamed:@"strokedCardFront"] : [UIImage imageNamed:@"cardFront"];
 }
 
 -(NSAttributedString *)titleForCard:(Card *)card
@@ -46,6 +46,7 @@
     }
     return nil;
 }
+
 
 
 @end

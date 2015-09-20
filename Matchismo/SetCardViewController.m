@@ -56,10 +56,14 @@
     if ([self isSolidCard:card]) {
         return description;
     } else if ([self isOutlinedCard:card]) {
-        [description addAttribute:NSStrokeWidthAttributeName value:@3 range:NSMakeRange(0, [description length])];
+        [description addAttribute:NSStrokeWidthAttributeName value:@4 range:NSMakeRange(0, [description length])];
     } else if ([self isSemiTransparentCard:card]) {
         UIColor *newColor = [description attribute:NSForegroundColorAttributeName atIndex:0 effectiveRange:NULL];
-        [description addAttribute:NSForegroundColorAttributeName value:[newColor colorWithAlphaComponent:0.5] range:NSMakeRange(0, [description length])];
+        //[description addAttribute:NSForegroundColorAttributeName value:[newColor colorWithAlphaComponent:0.5] range:NSMakeRange(0, [description length])];
+        [description addAttributes:@{NSForegroundColorAttributeName : [newColor colorWithAlphaComponent:0.3],
+                                     NSStrokeWidthAttributeName : @-4,
+                                     NSStrokeColorAttributeName : newColor}
+                             range:NSMakeRange(0, [description length])];
     }
     return description;
 }

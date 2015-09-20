@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "Deck.h"
 #import "Card.h"
+#import "CardGameAction.h"
 
 #pragma mark - CardMatchingGame Public Interface
 @interface CardMatchingGame : NSObject
@@ -24,8 +25,6 @@
 @property (nonatomic, readonly) NSInteger score;
 @property (nonatomic) NSUInteger numberOfCardsToCompareMatch;
 @property (nonatomic, readonly) BOOL gameStarted;
-@property (nonatomic) NSInteger lastAttemptedMatchScoreChange;
-@property (nonatomic) BOOL lastMatchAttemptSuccessful;
-@property (nonatomic, strong, readonly) NSMutableArray *lastChosenCards; // of Card
+@property (nonatomic, strong, readonly) NSArray *gameActions; // of CardGameAction
 
 @end

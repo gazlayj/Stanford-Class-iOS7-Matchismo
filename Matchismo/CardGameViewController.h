@@ -14,11 +14,11 @@
 @interface CardGameViewController : UIViewController
 
 @property (strong, nonatomic) CardMatchingGame *game;
-
 // Protected
 // For Subclass implementation only
 - (Deck *)createDeck; // abstract
 - (UIImage *)backgroundImageForCard:(Card *)card;
 - (NSAttributedString *)titleForCard:(Card *)card;
+
 
 @end
