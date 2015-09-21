@@ -127,7 +127,10 @@ static const int COST_TO_CHOOSE = 1;
 {
     CardGameAction *action = [[CardGameAction alloc] initCardGameActionWithChosenCards:[self getChosenUnmatchedCards]];
     
-    if ([self enoughCardsForMatchingAction:action]) [self matchCardsForAction:action];
+    if ([self enoughCardsForMatchingAction:action]) {
+        [self matchCardsForAction:action];
+    }
+    
     [self.gameActionHistory addObject:action];
 }
 

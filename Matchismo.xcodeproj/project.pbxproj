@@ -25,6 +25,7 @@
 		25C674801B96A49500E9E318 /* Deck.m in Sources */ = {isa = PBXBuildFile; fileRef = 25C6747F1B96A49500E9E318 /* Deck.m */; };
 		25C674831B96A6C200E9E318 /* PlayingCardDeck.m in Sources */ = {isa = PBXBuildFile; fileRef = 25C674821B96A6C200E9E318 /* PlayingCardDeck.m */; };
 		25DF711A1B993161008D8203 /* CardMatchingGame.m in Sources */ = {isa = PBXBuildFile; fileRef = 25DF71191B993161008D8203 /* CardMatchingGame.m */; };
+		5A43571D1BAFBCB700E69B56 /* GameActionHistoryViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A43571C1BAFBCB700E69B56 /* GameActionHistoryViewController.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +74,8 @@
 		25C674821B96A6C200E9E318 /* PlayingCardDeck.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PlayingCardDeck.m; path = Model/PlayingCardDeck.m; sourceTree = "<group>"; };
 		25DF71181B993161008D8203 /* CardMatchingGame.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = CardMatchingGame.h; path = Model/CardMatchingGame.h; sourceTree = "<group>"; };
 		25DF71191B993161008D8203 /* CardMatchingGame.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = CardMatchingGame.m; path = Model/CardMatchingGame.m; sourceTree = "<group>"; };
+		5A43571B1BAFBCB700E69B56 /* GameActionHistoryViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameActionHistoryViewController.h; sourceTree = "<group>"; };
+		5A43571C1BAFBCB700E69B56 /* GameActionHistoryViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GameActionHistoryViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,6 +123,8 @@
 				25910D091BA7AABD00A9CABA /* PlayingCardGameViewController.m */,
 				25910D111BA7D81600A9CABA /* SetCardGameViewController.h */,
 				25910D121BA7D81600A9CABA /* SetCardGameViewController.m */,
+				5A43571B1BAFBCB700E69B56 /* GameActionHistoryViewController.h */,
+				5A43571C1BAFBCB700E69B56 /* GameActionHistoryViewController.m */,
 				25C674581B96964C00E9E318 /* Main.storyboard */,
 				2539A4121BA9218200F7F6C6 /* SetCardViewController.h */,
 				2539A4131BA9218200F7F6C6 /* SetCardViewController.m */,
@@ -294,6 +299,7 @@
 				25C674801B96A49500E9E318 /* Deck.m in Sources */,
 				25C674791B969CC700E9E318 /* Card.m in Sources */,
 				25910D0A1BA7AABD00A9CABA /* PlayingCardGameViewController.m in Sources */,
+				5A43571D1BAFBCB700E69B56 /* GameActionHistoryViewController.m in Sources */,
 				2539A4141BA9218200F7F6C6 /* SetCardViewController.m in Sources */,
 				254BEF3D1BAC9E6400248AE1 /* CardGameAction.m in Sources */,
 			);

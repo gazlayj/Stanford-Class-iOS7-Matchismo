@@ -8,14 +8,14 @@
 
 #import "CardGameViewController.h"
 #import "CardMatchingGame.h"
+#import "GameActionHistoryViewController.h"
 
 @interface CardGameViewController ()
 
 @property (strong, nonatomic) IBOutletCollection(UIButton) NSArray *cardButtons;
 @property (weak, nonatomic) IBOutlet UILabel *scoreLabel;
 @property (weak, nonatomic) IBOutlet UILabel *gameActionDescriptionLabel;
-//@property (strong, nonatomic) NSMutableArray *chosenCardsResultHistory; // of NSString
-@property (weak, nonatomic) IBOutlet UISlider *resultsHistorySlider;
+
 
 @end
 
@@ -54,30 +54,17 @@
     NSUInteger chosenButtonIndex = [self.cardButtons indexOfObject:sender];
     [self.game choosecardAtIndex:chosenButtonIndex];
     [self updateUI];
-    [self.resultsHistorySlider setValue:self.resultsHistorySlider.maximumValue animated:YES];
     [self.gameActionDescriptionLabel setAlpha:1.0];
 }
 
-- (IBAction)resultsHistorySilderValuChanged:(UISlider *)sender
-{
-    int chosenCardsResultHistoryIndex = sender.value;
-    if ([self.game.gameActions count] > chosenCardsResultHistoryIndex) {
-        [self.gameActionDescriptionLabel setAlpha:0.5];
-        [self updateGameActionDescriptionLabel];
-    } else {
-        [self.gameActionDescriptionLabel setAlpha:1.0];
-    }
-}
+
 // Helper Methods
 
 - (void)updateUI
 {
-    
     [self updateCards];
     self.scoreLabel.text = [NSString stringWithFormat:@"Score: %ld", (long)self.game.score];
     [self updateGameActionDescriptionLabel];
-    [self updateResultsHistory];
-    
 }
 
 - (void)updateCards
@@ -91,15 +78,9 @@
     }
 }
 
-- (void)updateResultsHistory
-{
-//    [self.chosenCardsResultHistory addObject:self.gameActionDescriptionLabel.text];
-    self.resultsHistorySlider.maximumValue = [self.game.gameActions count];
-}
 
 - (NSAttributedString *)descriptionForGameAction:(CardGameAction *)action
 {
-    
     NSAttributedString *cardsDescription = [self descriptionForCards:action.chosenCards];
     NSMutableAttributedString *gameActionDescription = [cardsDescription mutableCopy];
     
@@ -131,7 +112,7 @@
         if ([cardsDescription length] > 0) {
             [cardsDescription appendAttributedString:[[NSAttributedString alloc] initWithString:@", "]];
         }
-        [cardsDescription appendAttributedString:[self titleForCard:card]];
+        [cardsDescription appendAttributedString:[self cardDescription:card]];
     }
     
     return cardsDescription;
@@ -139,24 +120,49 @@
 
 - (void)updateGameActionDescriptionLabel
 {
-    NSUInteger actionIndex = self.resultsHistorySlider.value;
-    
-    if ([self.game.gameActions count] > actionIndex) {
-        self.gameActionDescriptionLabel.attributedText = [self descriptionForGameAction:self.game.gameActions[actionIndex]];
+    if ([self.game.gameActions count] > 0) {
+        self.gameActionDescriptionLabel.attributedText = [self descriptionForGameAction:[self.game.gameActions lastObject]];
     } else {
         self.gameActionDescriptionLabel.attributedText = nil;
     }
 }
 
+-(NSAttributedString *)cardDescription:(Card *)card
+{
+    NSMutableAttributedString *description = [[self titleForCard:card] mutableCopy];
+    if ([description length] == 0) {
+        description = [[NSMutableAttributedString alloc] initWithString:card.contents];
+    }
+    
+    return [description copy];
+}
+
 
 - (NSAttributedString *)titleForCard:(Card *)card
 {
+    
     return card.isChosen ? [[NSAttributedString alloc] initWithString:card.contents] : [[NSAttributedString alloc] initWithString:@""];
 }
 
 - (UIImage *)backgroundImageForCard:(Card *)card
 {
     return [UIImage imageNamed:card.isChosen ? @"cardFront" : @"cardBack"];
+}
+
+-(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([segue.identifier isEqualToString:@"toHistorySegue"]) {
+        if ([segue.destinationViewController isKindOfClass:[GameActionHistoryViewController class]]) {
+            
+            NSMutableArray *gameActionsDescriptions = [[NSMutableArray alloc] init];
+            for (CardGameAction *action in self.game.gameActions) {
+                NSAttributedString *actionDescription = [self descriptionForGameAction:action];
+                [gameActionsDescriptions addObject:actionDescription];
+            }
+            GameActionHistoryViewController *vc = segue.destinationViewController;
+            vc.gameActionHistoryStrings = [gameActionsDescriptions copy];
+        }
+    }
 }
 
 
