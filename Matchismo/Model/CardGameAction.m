@@ -34,20 +34,12 @@
 
 -(CardGameActionType)matchCards
 {
-    CardGameActionType actionType = self.actionType;
-    if (actionType == CardChosen) {
-        int matchScore = [self getMatchScore];
+    if (self.actionType == CardChosen) {
+        self.pointsEarned = [self getMatchScore];
         
-        if (matchScore) {
-            actionType = Match;
-        } else {
-            actionType = Mismatch;
-        }
-        
-        self.pointsEarned = matchScore;
+        [self setMatchActionType];
     }
     
-    self.actionType = actionType;
     return self.actionType;
 }
 
@@ -82,6 +74,15 @@
     }
     
     return matchScore;
+}
+
+- (void)setMatchActionType
+{
+    if (self.pointsEarned) {
+        self.actionType = Match;
+    } else {
+        self.actionType = Mismatch;
+    }
 }
 
 
