@@ -21,7 +21,7 @@
     NSMutableAttributedString *actionsDescriptions = [[NSMutableAttributedString alloc] init];
     for (NSAttributedString *actionDescription in self.gameActionHistoryStrings) {
         if ([self.gameActionHistoryStrings indexOfObject:actionDescription] > 0) {
-            [actionsDescriptions appendAttributedString:[[NSAttributedString alloc] initWithString:@";\n"]];
+            [actionsDescriptions appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
         }
         
              [actionsDescriptions appendAttributedString:actionDescription];

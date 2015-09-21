@@ -135,12 +135,6 @@ static const int COST_TO_CHOOSE = 1;
 }
 
 
-- (BOOL)enoughCardsForMatchingAction:(CardGameAction *)action
-{
-    return ([action.chosenCards count] == self.numberOfCardsToCompareMatch) ? YES : NO;
-}
-
-
 - (NSArray *)getChosenUnmatchedCards
 {
     NSMutableArray *chosenUnmatchedCards = [[NSMutableArray alloc] init];
@@ -156,22 +150,31 @@ static const int COST_TO_CHOOSE = 1;
     return [chosenUnmatchedCards copy];
 }
 
+- (BOOL)enoughCardsForMatchingAction:(CardGameAction *)action
+{
+    return ([action.chosenCards count] == self.numberOfCardsToCompareMatch) ? YES : NO;
+}
+
 
 - (void)matchCardsForAction:(CardGameAction *)action
 {
     [action matchCards];
-    
-    if (action.actionType == Match) {
-        self.score += [action applyMatchBonusMultiplier:MATCH_BONUS];
-        for (Card *card in action.chosenCards) {
-            card.matched = YES;
-        }
-    } else if (action.actionType == Mismatch) {
-        self.score -= [action subtractMismatchPenalty:MISMATCH_PENALTY];
-        for (Card *card in action.chosenCards) {
-            card.matched = NO;
-            card.chosen = NO;
-        }
+    [self applyBonusOrPenaltyToAction:action];
+}
+
+- (void)applyBonusOrPenaltyToAction:(CardGameAction *)action
+{
+    switch (action.actionType) {
+        case Match:
+            self.score += [action applyMatchBonusMultiplier:MATCH_BONUS];
+            break;
+            
+        case Mismatch:
+            self.score -= [action subtractMismatchPenalty:MISMATCH_PENALTY];
+            break;
+            
+        default:
+            break;
     }
 }
 

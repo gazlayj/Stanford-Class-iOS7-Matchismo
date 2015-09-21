@@ -38,6 +38,7 @@
         self.pointsEarned = [self getMatchScore];
         
         [self setMatchActionType];
+        [self setAtttemptedMatchedCardsState];
     }
     
     return self.actionType;
@@ -82,6 +83,36 @@
         self.actionType = Match;
     } else {
         self.actionType = Mismatch;
+    }
+}
+
+- (void)setAtttemptedMatchedCardsState
+{
+    switch (self.actionType) {
+        case Match:
+            [self markCardsMatched];
+            break;
+            
+        case Mismatch:
+            [self unchoseCards];
+            break;
+            
+        default:
+            break;
+    }
+}
+
+- (void)markCardsMatched
+{
+    for (Card *card in self.chosenCards) {
+        card.matched = YES;
+    }
+}
+
+- (void)unchoseCards
+{
+    for (Card *card in self.chosenCards) {
+        card.chosen = NO;
     }
 }
 
