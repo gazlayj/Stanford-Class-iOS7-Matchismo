@@ -65,8 +65,9 @@
 - (int)getMatchScore
 {
     int matchScore = 0;
+    NSMutableArray *remainingCards = [self.chosenCards mutableCopy];
+    
     for (Card *card in self.chosenCards) {
-        NSMutableArray *remainingCards = [self.chosenCards mutableCopy];
         [remainingCards removeObject:card];
         
         if ([remainingCards count] >= 1) {
