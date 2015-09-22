@@ -10,35 +10,20 @@
 
 @implementation PlayingCard
 
+static const int MATCHED_RANK_SCORE = 4;
+static const int MATCHED_SUITE_SCORE = 1;
+
 - (int)match:(NSArray *)otherCards
 {
     int score = 0;
     
-    if ([otherCards count] == 1) {
+    if ([self isOneCardToMatch:otherCards]) {
         PlayingCard *otherCard = [otherCards firstObject];
-        if (otherCard.rank == self.rank) {
-            score = 4;
-        } else if ([otherCard.suit isEqualToString:self.suit]) {
-            score = 1;
-        }
-    } else if ([otherCards count] > 1) {
-        int matchCount = 0;
-        
-        for (PlayingCard *otherCard in otherCards) {
-            if (otherCard.rank == self.rank) {
-                score = 4;
-                matchCount += 1;
-            } else if ([otherCard.suit isEqualToString:self.suit]) {
-                score = 1;
-                matchCount += 1;
-            }
-        }
-        if (matchCount > 0) {
-            score += score * matchCount;
-        }
+        score = [self scoreForSingleMatchCard:otherCard];
+    } else if ([self isMultipleCardsToMatch:otherCards]) {
+        score = [self scoreForMultipleMatchCards:otherCards];
     }
 
-    
     return score;
 }
 
@@ -79,6 +64,63 @@
     if (rank <= [PlayingCard maxRank]) {
         _rank = rank;
     }
+}
+
+#pragma mark - HelperMethods
+
+- (BOOL)isOneCardToMatch:(NSArray *)otherCards
+{
+    return ([otherCards count] == 1) ? YES : NO;
+}
+
+- (BOOL)isMultipleCardsToMatch:(NSArray *)otherCards
+{
+    return ([otherCards count] > 1) ? YES : NO;
+}
+
+- (int)scoreForSingleMatchCard:(PlayingCard *)card
+{
+    int score = 0;
+    
+    if ([self isSameRankAsCard:card]) {
+        score = MATCHED_RANK_SCORE;
+    } else if ([self isSameSuiteAsCard:card]) {
+        score = MATCHED_SUITE_SCORE;
+    }
+    
+    return score;
+}
+
+- (int)scoreForMultipleMatchCards:(NSArray *)otherCards
+{
+    int score = 0;
+    int matchCount = 0;
+    
+    for (PlayingCard *otherCard in otherCards) {
+        if ([self isSameRankAsCard:otherCard]) {
+            score = MATCHED_RANK_SCORE;
+            matchCount += 1;
+        } else if ([self isSameSuiteAsCard:otherCard]) {
+            score = MATCHED_SUITE_SCORE;
+            matchCount += 1;
+        }
+    }
+    
+    if (matchCount > 0) {
+        score += score * matchCount;
+    }
+    
+    return score;
+}
+
+- (BOOL)isSameRankAsCard:(PlayingCard *)card
+{
+    return (self.rank == card.rank) ? YES : NO;
+}
+
+- (BOOL)isSameSuiteAsCard:(PlayingCard *)card
+{
+    return ([self.suit isEqualToString:card.suit]) ? YES : NO;
 }
 
 @end
