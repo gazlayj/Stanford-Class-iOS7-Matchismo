@@ -42,7 +42,8 @@
 - (NSAttributedString *)getAttributedStringForCard:(Card *)card
 {
     if ([card isKindOfClass:[SetCard class]]) {
-        SetCardViewController *setVC = [[SetCardViewController alloc] initWithSetCard:card];
+        SetCard *setCard = (SetCard *)card;
+        SetCardViewController *setVC = [[SetCardViewController alloc] initWithSetCard:setCard];
         return [setVC attributedStringDescription];
     }
     
