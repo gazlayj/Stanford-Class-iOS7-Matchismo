@@ -18,18 +18,23 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     // Do any additional setup after loading the view.
+    
+    self.gameActionDescriptionTextView.attributedText = [self actionsHistoryDescription];
+}
+
+- (NSAttributedString *)actionsHistoryDescription
+{
     NSMutableAttributedString *actionsDescriptions = [[NSMutableAttributedString alloc] init];
     for (NSAttributedString *actionDescription in self.gameActionHistoryStrings) {
         if ([self.gameActionHistoryStrings indexOfObject:actionDescription] > 0) {
             [actionsDescriptions appendAttributedString:[[NSAttributedString alloc] initWithString:@"\n"]];
         }
         
-             [actionsDescriptions appendAttributedString:actionDescription];
+        [actionsDescriptions appendAttributedString:actionDescription];
     }
-    
-    self.gameActionDescriptionTextView.attributedText = actionsDescriptions;
-}
 
+    return [actionsDescriptions copy];
+}
 
 
 
