@@ -38,7 +38,7 @@
         self.pointsEarned = [self getMatchScore];
         
         [self setMatchActionType];
-        [self setAtttemptedMatchedCardsState];
+        [self setAttemptedMatchedCardsState];
     }
     
     return self.actionType;
@@ -87,7 +87,7 @@
     }
 }
 
-- (void)setAtttemptedMatchedCardsState
+- (void)setAttemptedMatchedCardsState
 {
     switch (self.actionType) {
         case Match:
