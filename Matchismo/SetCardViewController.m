@@ -8,93 +8,120 @@
 
 #import "SetCardViewController.h"
 
+
+@interface SetCardViewController()
+@property SetCard *card;
+
+@end
+
 @implementation SetCardViewController
 
-+(NSAttributedString *)getAttributedStringDescriptionForCard:(SetCard *)card
+-(instancetype)initWithSetCard:(SetCard *)card
+{
+    self = [super init];
+    
+    if (self) {
+        self.card = card;
+    }
+    
+    return self;
+}
+
+- (NSAttributedString *)attributedStringDescription
 {
     NSMutableAttributedString *cardDescription = [[NSMutableAttributedString alloc] init];
     
-    [cardDescription appendAttributedString:[self symbolForCard:card]];
-    [cardDescription appendAttributedString:[self duplicateSymbolsForCard:card]];
-    [cardDescription addAttribute:NSForegroundColorAttributeName value:[self colorForCard:card]
+    [cardDescription appendAttributedString:[self allSymbolsForCard]];
+    [cardDescription addAttribute:NSForegroundColorAttributeName value:[self colorForCard]
                             range:NSMakeRange(0, [cardDescription length])];
     
-    NSAttributedString *shadedCardDescription = [self shadeCardDescription:cardDescription forCard:card];
+    NSAttributedString *shadedCardDescription = [self shadeCardDescription:cardDescription];
 
     return shadedCardDescription;
 }
 
 #pragma mark - Helper Methods
 
-+ (NSAttributedString *)symbolForCard:(SetCard *)card
+- (NSAttributedString *)cardSymbol
 {
-    return [[NSAttributedString alloc] initWithString:[self validSymbols][card.symbolIdentifier]];
+    return [[NSAttributedString alloc] initWithString:[self validSymbols][self.card.symbolIdentifier]];
 }
 
 
-+ (UIColor *)colorForCard:(SetCard *)card
+- (UIColor *)colorForCard
 {
-    return [self validColors][card.colorIdentifier];
+    return [self validColors][self.card.colorIdentifier];
 }
 
 
-+ (NSAttributedString *)duplicateSymbolsForCard:(SetCard *)card
+- (NSAttributedString *)allSymbolsForCard
 {
     NSMutableAttributedString *symbolsToAdd = [[NSMutableAttributedString alloc] init];
-    for (int i = 1; i < card.number; i++) {
-        [symbolsToAdd appendAttributedString:[self symbolForCard:card]];
+    for (int i = 0; i < self.card.number; i++) {
+        [symbolsToAdd appendAttributedString:[self cardSymbol]];
     }
     
     return symbolsToAdd;
 }
 
 
-+ (NSAttributedString *)shadeCardDescription:(NSAttributedString *)cardDescription forCard:(SetCard *)card
+- (NSAttributedString *)shadeCardDescription:(NSAttributedString *)cardDescription
 {
     NSMutableAttributedString *description = [[NSMutableAttributedString alloc] initWithAttributedString:cardDescription];
     
-    if ([self isSolidCard:card]) {
+    if ([self isSolidCard]) {
         return description;
-    } else if ([self isOutlinedCard:card]) {
-        [description addAttribute:NSStrokeWidthAttributeName value:@4 range:NSMakeRange(0, [description length])];
-    } else if ([self isSemiTransparentCard:card]) {
-        UIColor *newColor = [description attribute:NSForegroundColorAttributeName atIndex:0 effectiveRange:NULL];
-        //[description addAttribute:NSForegroundColorAttributeName value:[newColor colorWithAlphaComponent:0.5] range:NSMakeRange(0, [description length])];
-        [description addAttributes:@{NSForegroundColorAttributeName : [newColor colorWithAlphaComponent:0.3],
-                                     NSStrokeWidthAttributeName : @-4,
-                                     NSStrokeColorAttributeName : newColor}
-                             range:NSMakeRange(0, [description length])];
+    } else if ([self isOutlinedCard]) {
+        description = [[self outlinedCardDescription:description] mutableCopy];
+    } else if ([self isSemiTransparentCard]) {
+        description = [[self semiTransparentCardDescription:description] mutableCopy];
     }
+    
     return description;
 }
 
 
-+ (BOOL)isSolidCard:(SetCard *)card
+- (BOOL)isSolidCard
 {
-    return card.shadingIdentifier == 0;
+    return self.card.shadingIdentifier == 0;
 }
 
 
-+ (BOOL)isOutlinedCard:(SetCard *)card
+- (BOOL)isOutlinedCard
 {
-    return card.shadingIdentifier == 1;
+    return self.card.shadingIdentifier == 1;
 }
 
 
-+ (BOOL)isSemiTransparentCard:(SetCard *)card
+- (BOOL)isSemiTransparentCard
 {
-    return card.shadingIdentifier == 2;
+    return self.card.shadingIdentifier == 2;
+}
+
+- (NSAttributedString *)outlinedCardDescription:(NSMutableAttributedString *)description
+{
+    [description addAttributes: @{NSStrokeWidthAttributeName : @4} range:NSMakeRange(0, [description length])];
+    return description;
+}
+
+- (NSAttributedString *)semiTransparentCardDescription:(NSMutableAttributedString *)description
+{
+    UIColor *newColor = [description attribute:NSForegroundColorAttributeName atIndex:0 effectiveRange:NULL];
+    
+    [description addAttributes:@{NSForegroundColorAttributeName : [newColor colorWithAlphaComponent:0.3],
+                                 NSStrokeWidthAttributeName : @-4,
+                                 NSStrokeColorAttributeName : newColor}
+                         range:NSMakeRange(0, [description length])];
+    return description;
 }
 
 
-
-
-+ (NSArray *)validSymbols
+- (NSArray *)validSymbols
 {
     return @[@"●", @"▲", @"■"];
 }
 
-+ (NSArray *)validColors
+- (NSArray *)validColors
 {
     return @[[UIColor redColor], [UIColor greenColor], [UIColor purpleColor]];
 }

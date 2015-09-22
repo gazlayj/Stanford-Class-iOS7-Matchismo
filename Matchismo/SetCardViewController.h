@@ -11,6 +11,7 @@
 
 @interface SetCardViewController : UIViewController
 
-+ (NSAttributedString *)getAttributedStringDescriptionForCard:(SetCard *)card;
+-(instancetype)initWithSetCard:(SetCard *)card;
+- (NSAttributedString *)attributedStringDescription;
 
 @end
